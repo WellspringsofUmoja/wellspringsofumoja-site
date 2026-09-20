@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Wellsprings of Umoja foundation</title>
+
+<style>
+   /* ===== Self-hosted fonts ===== */
+  @font-face {
+    font-family: 'IM Fell DW Pica';
+    src: url('fonts/im-fell-dw-pica-v16-latin-regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'IM Fell DW Pica';
+    src: url('fonts/im-fell-dw-pica-v16-latin-italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+  }
+
+  /* ===== Design tokens ===== */
+  :root {
+    --text-heading:  #a54a0a;
+    --ink:           #3a322c;
+    --surface-alt:   #e9dfd2;
+    --brand:         #dcae08;
+    --teal:          #059288;
+    --text-inverse:  #fdfaf4;
+    --bg:            #8f7913;
+    --surface:       #b6ac9b;
+    --accent:        #B47c0c;
+    --accent-strong: #a54a0a;
+    --badge:         #b6ac9b;
+    --band-dark:     #562e17;
+    --focus-ring:    #059288;
+    --radius:        14px;
+    --shadow:        0 10px 30px rgba(46,36,32,.12);
+    --font-head:     "IM Fell DW Pica", Georgia, 'Times New Roman', serif;
+    --font-body:     'Segoe UI', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.7;
+  }
+
+  /* ===== Top bar ===== */
+  .topbar {
+    background: var(--teal);
+    color: var(--text-inverse);
+    text-align: center;
+    padding: .55rem 1rem;
+    font-size: .85rem;
+    letter-spacing: .04em;
+  }
+
+.topbar a {
+  color: inherit;
+  text-decoration: none;
+  position: relative;         /* add this */
+}
+.topbar a::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0; height: 2px;
+  background: var(--accent);
+  transition: width .25s ease;
+}
+.topbar a:hover::after {
+  width: 100%;
+}
+ /* ===== HEADER ===== */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .8rem 1.5rem;
+  background: var(--bg);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+/* Existing dropdown rules stay the same */
+
+/* The special row inside Connect */
+.icon-row {
+  display: flex;         /* Makes children sit side-by-side */
+  align-items: center;
+  justify-content: center; /* Centers the icons in the dropdown */
+  gap: .8rem;            /* Space between icons */
+  padding: .6rem 0;
+  background: transparent;
+  border-top: 1px solid rgba(0,0,0,0.1); /* Optional divider line */
+  margin-top: .2rem;
+}
+
+/* Individual icon buttons */
+.icon-link {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--surface-alt);
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 1.2rem;
+  transition: transform .2s, background .2s;
+}
+
+.icon-link:hover {
+  background: var(--accent);
+  color: var(--text-inverse);
+  transform: scale(1.1);
+}
+.logo {
+  font-family: var(--font-head);
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: var(--text-heading);
+  text-decoration: none;
+}
+.logo span { color: var(--surface-alt); }
+
+.main-nav {
+  display: flex;
+  gap: .5rem;
+}
+
+.nav-item { position: relative; }
+
+.nav-btn {
+  background: none;
+  border: none;
+  font: inherit;
+  font-weight: 600;
+  color: var(--surface-alt);
+  padding: .6rem .9rem;
+  cursor: pointer;
+}
+.caret {
+  font-size: .7em;
+  opacity: .7;
+  margin-left: .15rem;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 190px;
+  background: var(--surface);
+  border-radius: 0 0 10px 10px;
+  box-shadow: var(--shadow);
+  padding: .4rem;
+  display: none;
+  z-index: 200;
+}
+
+.has-dropdown:hover .dropdown,
+.has-dropdown:focus-within .dropdown {
+  display: block;
+}
+
+.dropdown a {
+  display: block;
+  padding: .5rem .8rem;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: .92rem;
+  border-radius: 6px;
+}
+.dropdown a:hover {
+  background: var(--surface-alt);
+  color: var(--accent-strong);
+}
+
+.dropdown-row {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  gap: .3rem;
+}
+.has-dropdown:hover .dropdown-row,
+.has-dropdown:focus-within .dropdown-row {
+  display: flex;
+}
+.social { padding: .4rem .55rem; font-size: 1.05rem; }
+
+.btn-subscribe {
+  background: var(--brand);
+  color: var(--band-dark);
+  padding: .55rem 1.3rem;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.btn-subscribe:hover { transform: scale(1.1) }
+
+ /* ===== Hero ===== */
+.hero {
+  min-height: 78vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;    /* vertical centering */
+  align-items: center;        /* horizontal centering */
+  text-align: center;         /* text within children */
+  padding: 4rem 1.5rem;
+  background:
+    radial-gradient(ellipse at 70% 20%, rgba(220,174,8,.28), transparent 55%),
+    radial-gradient(ellipse at 20% 80%, rgba(5,146,136,.30), transparent 55%),
+    var(--surface-alt);
+  position: relative;
+  overflow: hidden;
+}
+
+/* More specific selector — only direct child div */
+.hero > div {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+
+  .hero h1 {
+    font-family: var(--font-head);
+    font-size: clamp(1.5rem, 4vw, 3.5rem);
+    color: var(--text-heading);
+    max-width: 18ch;
+    margin-left: auto;
+    margin-right:auto;
+    line-height: 1.15;
+  }
+  .hero p.tagline {
+    font-style: italic;
+    color: var(--text-heading);
+    margin-top: 1rem;
+    font-size: 1.15rem;
+  }
+  .hero .cta-row { 
+    margin-top: 2.2rem; 
+    display: flex; 
+    gap: 1rem; 
+    justify-content: center; 
+    flex-wrap: wrap; }
+
+  .btn-primary {
+    background: var(--teal);
+    color: var(--text-inverse);
+    padding: .85rem 1.8rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: filter .2s;
+  }
+  .btn-primary:hover {background: var(--brand); color: var(--band-dark); }
+  .btn-ghost {
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    padding: .8rem 1.8rem;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background .2s, color .2s;
+  }
+  .btn-ghost:hover { background: var(--text-heading); color: var(--text-inverse); }
+
+
+
+  /* ===== Section shell ===== */
+  section { padding: 4.5rem 1.5rem; }
+  .section-inner { max-width: 1000px; margin: 0 auto; }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    font-size: .75rem;
+    color: var(--teal);
+    font-weight: 700;
+    margin-bottom: .6rem;
+  }
+  h2 {
+    font-family: var(--font-head);
+    font-size: clamp(1.2rem, 3vw, 2.2rem);
+    color: var(--text-heading);
+    margin-bottom: 1.2rem;
+  }
+
+  /* ===== Panel nav (desktop) ===== */
+.panel-nav {
+  display: flex;
+  align-items: stretch;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  transition: flex-grow .3s ease;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: transparent;
+  border: none;
+  padding: .75rem 1rem;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+
+.panel-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+}
+
+[data-panel="foundation"] .panel-head { background: var(--brand); }
+[data-panel="anchoring"]   .panel-head { background: var(--accent-strong); }
+[data-panel="amplifying"]  .panel-head { background: var(--surface); }
+
+.panel-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .35s ease;
+}
+
+.panel.open .panel-body {
+  max-height: 320px;
+}
+  /* ===== Three pillars: B3 / MOV3 / GATH3R ===== */
+  .pillars { background: var(--bg); }
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.8rem;
+    box-shadow: var(--shadow);
+    border-top: 4px solid var(--accent);
+    transition: transform .25s ease;
+  }
+  .card:nth-child(2) { border-top-color: var(--teal); }
+  .card:nth-child(3) { border-top-color: var(--accent-strong); }
+  .card:hover { transform: translateY(-6px); }
+  .card h3 {
+    font-family: var(--font-head);
+    margin-bottom: .5rem;
+    color: var(--text-heading);
+    font-size: 1.6rem;
+    letter-spacing: .02em;
+  }
+  .card p  { font-size: .95rem; }
+
+  .placeholder-chip {
+    display: inline-block;
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--teal);
+    background: var(--badge);
+    border-radius: 999px;
+    padding: .2rem .8rem;
+    margin-bottom: .8rem;
+  }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: all .7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ===== WISDOM band ===== */
+  .wisdom {
+    background: var(--band-dark);
+    color: var(--text-inverse);
+  }
+  .wisdom h2 { color: var(--text-inverse); }
+  .acronym {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2.2rem;
+  }
+  .acronym .letter {
+    text-align: center;
+    padding: 1.4rem;
+    border: 1px solid var(--surface);
+    border-radius: var(--radius);
+  }
+  .acronym .big {
+    font-family: var(--font-head);
+    font-size: 2.6rem;
+    color: var(--accent);
+    display: block;
+  }
+
+  /* ===== Events ===== */
+  .event {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 1.2rem;
+  }
+  .event .when {
+    background: var(--brand);
+    color: var(--text-inverse);
+    border-radius: 10px;
+    padding: .6rem 1rem;
+    text-align: center;
+    min-width: 86px;
+  }
+  .event .when strong { display: block; font-size: 1.1rem; }
+
+  /* ===== Subscribe — Brevo-ready ===== */
+  .subscribe { background: var(--surface-alt); text-align: center; }
+  .brevo-container {
+    max-width: 520px;
+    margin: 2rem auto 0;
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    border: 1px dashed var(--accent-strong);
+  }
+
+  .brevo-container input[type="email"],
+  .brevo-container input[type="text"] {
+    padding: .8rem 1.1rem;
+    border: 2px solid var(--accent-strong);
+    border-radius: 999px;
+    font-size: 1rem;
+    width: 100%;
+    max-width: 320px;
+    outline: none;
+    font-family: var(--font-body);
+  }
+  .brevo-container button,
+  .brevo-container input[type="submit"] {
+    background: var(--accent-strong);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: 999px;
+    padding: .8rem 1.8rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: filter .2s;
+  }
+  .brevo-container button:hover,
+  .brevo-container input[type="submit"]:hover { filter: brightness(.85); }
+
+  .brevo-container form.demo {
+    display: flex;
+    gap: .6rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  blockquote {
+    font-family: var(--font-head);
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--text-heading);
+    border-left: 5px solid var(--accent);
+    padding-left: 1.4rem;
+    margin: 2rem 0;
+  }
+
+  /* ===== Footer ===== */
+  footer {
+    background: var(--band-dark);
+    color: var(--text-inverse);
+    padding: 3rem 1.5rem;
+    text-align: center;
+    font-size: .9rem;
+  }
+  footer nav ul { justify-content: center; margin-bottom: 1.2rem; }
+  footer a { color: var(--text-inverse); }
+
+  /* ===== Toast ===== */
+  #toast {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--teal);
+    color: var(--text-inverse);
+    padding: .8rem 1.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    box-shadow: var(--shadow);
+    transition: transform .35s ease;
+    z-index: 200;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ===== Focus accessibility ===== */
+  :focus-visible {
+    outline: 3px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+
+   /* ===== Responsive ===== */
+  
+  /* Desktop base: Hide hamburger, unstyled */
+  .menu-toggle { 
+    display: none; 
+    background: none; 
+  }
+
+  @media (max-width: 760px) {
+    .site-header {
+      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Mobile: Show hamburger */
+    .menu-toggle {
+      display: block;       /* Override the desktop hide */
+      order: 2;             /* Position after logo */
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: var(--text-heading);
+      padding: .5rem;
+    }
+
+    .main-nav { 
+      display: none; 
+    }
+    
+    .main-nav.open { 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+    }
+  
+
+  .nav-item {
+    width: 100%;
+    border-bottom: 1px solid rgba(0,0,0,.1);
+  }
+
+  .dropdown {
+    position: static;
+    box-shadow: none;
+    background: var(--bg);
+    padding: 0 .8rem;
+  }
+
+  .nav-btn {
+    width: 100%;
+    text-align: left;
+    padding: .8rem 0;
+  }
+
+  .btn-subscribe {
+    width: 100%;
+    margin-top: .6rem;
+    text-align: center;
+  }
+  }
+
+  
+</style>
+</head>
+<body>
+
+<div class="topbar"><a href="#connect">Join the discussion —  fellowship call mid-day every Wednesday!</a></div>
+
+<header class="site-header">
+  <a href="#" class="logo">Wellsprings <span>of Umoja</span></a>
+<button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+  <nav class="main-nav">
+    <div class="nav-item has-dropdown">
+      <button class="nav-btn">Offerings <span class="caret">▾</span></button>
+      <div class="dropdown">
+        <a href="#b3">B3 W.i.s.e</a>
+        <a href="#mov3">MOV3 W.i.s.e</a>
+        <a href="#gath3r">GATH3R W.i.s.e</a>
+        <a href="#vitals">Other W.i.s.e Vitals</a>
+      </div>
+    </div>
+
+    <div class="nav-item has-dropdown">
+      <button class="nav-btn">Network <span class="caret">▾</span></button>
+      <div class="dropdown">
+        <a href="#trusts">7GenPlus Trusts</a>
+        <a href="#homeoasis">Homeoasis</a>
+      </div>
+    </div>
+
+    <div class="nav-item has-dropdown">
+      <button class="nav-btn">Fellowship <span class="caret">▾</span></button>
+      <div class="dropdown">
+        <a href="#when">When</a>
+        <a href="#what">What</a>
+        <a href="#why">Why</a>
+        <a href="#who">Who</a>
+      </div>
+    </div>
+
+   <div class="nav-item has-dropdown">
+  <button class="nav-btn">Connect <span class="caret">▾</span></button>
+  <div class="dropdown">
+    <a href="#latest">Latest</a>
+    <a href="#donate">Donate</a>
+    <!-- The special row -->
+    <div class="icon-row">
+      <a href="https://instagram.com/JourneyHomeVitals" class="icon-link" aria-label="Instagram">📷</a>
+      <a href="#" class="icon-link" aria-label="TikTok">👥</a>
+      <a href="#" class="icon-link" aria-label="Qortal">🐦</a>
+    </div>
+  </div>
+</div>
+  </nav>
+
+  <a href="#connect" class="btn-subscribe">Subscribe</a>
+</header>
+<main>
+  <!-- HERO -->
+  <div class="hero" id="home">
+    
+    <div>
+      <h1>The more of us who are well</h1>
+        <br>
+        <br>
+       <h2>within ourselves,
+        <br>
+        within our communities,
+        <br>
+        and on the land we walk on</h2> 
+       <br>
+       <h1>the more at home we will all feel home on this earth.</h1>
+      <p class="tagline">Rooted in w.i.s.dom — wellness, interconnection, sovereignty</p>
+      <div class="cta-row">
+        <a class="btn-primary" href="#offerings">Explore B3</a>
+        <a class="btn-ghost" href="#anchoring">Visit the Homeoasis Anchor</a>
+</div>
+    </div>
+  </div>
+  <!-- B3 / MOV3 / GATH3R -->
+  <section class="pillars" id="offerings">
+    <div class="section-inner">
+      <p class="eyebrow">Three Pillars</p>
+      <h2>B3 · MOV3 · GATH3R</h2>
+      <p>The three pillars at the heart of the journey. Each one unfolds below.</p>
+      <div class="pillar-grid">
+        <div class="card reveal" id="b3-card">
+          <span class="placeholder-chip">Coming soon</span>
+          <h3>B3</h3>
+          <p>[Placeholder — B3 content coming soon.]</p>
+        </div>
+        <div class="card reveal" id="mov3-card">
+          <span class="placeholder-chip">Coming soon</span>
+          <h3>MOV3</h3>
+          <p>[Placeholder — MOV3 content coming soon.]</p>
+        </div>
+        <div class="card reveal" id="gath3r-card">
+          <span class="placeholder-chip">Coming soon</span>
+          <h3>GATH3R</h3>
+          <p>[Placeholder — GATH3R content coming soon.]</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="mov3">
+    <div class="section-inner">
+      <p class="eyebrow">Pillar Two</p>
+      <h2>MOV3</h2>
+      <p>[Placeholder — full MOV3 section. Reserved space for upcoming content, media, or embeds.]</p>
+    </div>
+  </section>
+
+  <section id="gath3r">
+    <div class="section-inner">
+      <p class="eyebrow">Pillar Three</p>
+      <h2>GATH3R</h2>
+      <p>[Placeholder — full GATH3R section. Reserved space for upcoming content, media, or embeds.]</p>
+    </div>
+  </section>
+
+  <!-- FOUNDATION BAND -->
+  <section class="wisdom" id="foundation">
+    <div class="section-inner">
+      <p class="eyebrow" style="color: var(--accent);">Foundation</p>
+      <h2>What is the Wellsprings of Umoja foundation?</h2>
+      <p>A grassroots network of wellness, interconnection, and sovereignty — consciously built, collectively kept.</p>
+      <div class="acronym">
+        <div class="letter reveal"><span class="big">W</span>Wellness</div>
+        <div class="letter reveal"><span class="big">I</span>Interconnection</div>
+        <div class="letter reveal"><span class="big">S</span>Sovereignty</div>
+        <div class="letter reveal"><span class="big">OM</span>Together</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ANCHORING -->
+  <section id="anchoring">
+    <div class="section-inner">
+      <p class="eyebrow">Anchoring</p>
+      <h2>Budding Global Land Anchors Network</h2>
+      <div class="event">
+        <div class="when"><strong>SUN</strong>Mid-day</div>
+        <div>
+          <h3>Communion Service</h3>
+          <p>Every Sunday — join online or in person. All are welcome.</p>
+        </div>
+      </div>
+      <div class="event">
+        <div class="when"><strong>FL</strong>Central</div>
+        <div>
+          <h3>Homeoasis Anchor — Central Florida</h3>
+          <p>Come learn, come stay. Our first land anchor in the network.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUBSCRIBE — Brevo-ready -->
+  <section class="subscribe" id="connect">
+    <div class="section-inner">
+      <p class="eyebrow">Connect</p>
+      <h2>Join the conversation</h2>
+      <p>Stay in the loop as the journey unfolds.</p>
+      <div class="brevo-container">
+        <!-- DEMO FORM — replace with Brevo embed -->
+        <form class="demo" id="subForm">
+          <input type="email" id="email" placeholder="your@email.com" required aria-label="Email">
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="donate">
+  <nav>
+    <ul>
+      <li><a href="#b3">B3</a></li>
+      <li><a href="#mov3">MOV3</a></li>
+      <li><a href="#gath3r">GATH3R</a></li>
+      <li><a href="#foundation">About</a></li>
+      <li><a href="#connect">Connect</a></li>
+      <li><a href="#">Donate</a></li>
+    </ul>
+  </nav>
+  <p>Going, being, and always home. 🙏🏽🙏🏼</p>
+  <p style="margin-top:.6rem; opacity:.65;">Blessings accepted in fiat or crypto</p>
+</footer>
+
+<div id="toast">Subscribed — welcome home. 🕊️</div>
+
+<script>
+// Replace the orphaned code with this
+const menuToggle = document.getElementById('menuToggle');
+const mainNav = document.querySelector('.main-nav');
+
+menuToggle?.addEventListener('click', () => {
+  mainNav?.classList.toggle('open');
+});
+
+mainNav?.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mainNav.classList.remove('open');
+  });
+});
+
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.2 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Demo form — replace once the Brevo embed lands
+  document.getElementById('subForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+    e.target.reset();
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', ev => {
+      const el = document.querySelector(a.getAttribute('href'));
+      if (el) { ev.preventDefault(); el.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
+</body>
+</html>
